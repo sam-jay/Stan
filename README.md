@@ -1,2 +1,2 @@
 # Stan
-A simple RESTful auth service.
+A simple RESTful authentication and authorization service.
