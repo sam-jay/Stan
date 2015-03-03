@@ -1,7 +1,7 @@
 # Stan
 A simple RESTful authentication and authorization service.
 
-/auth_service/login (POST)
+* /auth_service/login (POST)
 ```json
 {
   "username": "USERNAME",
@@ -17,7 +17,7 @@ Returns 200 OK and
 ```
 on success, 401 UNAUTHORIZED on failure.
 
-/auth_service/users/:id (GET)
+* /auth_service/users/:id (GET)
 Returns 200 OK with
 ```json
 {
@@ -29,7 +29,7 @@ Returns 200 OK with
 ```
 on success.
 
-/auth_service/users (POST)
+* /auth_service/users (POST)
 ```json
 {
   "username": "USERNAME",
@@ -49,4 +49,4 @@ Returns 200 OK with
 ```
 on success.
 
-/auth_service/users/:id (PUT)
+* /auth_service/users/:id (PUT)
