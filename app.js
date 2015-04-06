@@ -1,56 +1,71 @@
+(function(){
+
+var config = require('./config');
+
 var express = require('express'),
-  DynamoDBModel = require('dynamodb-model'),
   AWS = require('aws-sdk'),
-  router = express.Router();
+  router = express.Router(),
+  parser = require('body-parser');
 
-/* Set Up DynamoDB */
+var app = express();
+app.use(parser.json());
 
-AWS.config.update({
-    accessKeyId: 'AKIAIA7NTQBR73JI6VHQ',
-    secretAccessKey: '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',
-    region: 'us-east-1'
+app.listen(config.port);
+console.log("Listening on port: " + config.port);
+
+
+var dynamodb = new AWS.DynamoDB({
+        region: 'us-east-1',
+        accessKeyId: '***',
+        secretAccessKey: '***'
 });
 
 
-/*
+app.post('/auth_service/users', function(req, res){
+	var params = {
+		TableName: 'stan-users',
+		Item:{
+			user: {'S': req.body.user},
+			email: {'S': req.body.email},
+			password: {'S': req.body.pw},
+			groups: {'S': req.body.groups}
+		}
+	};
 
-var s3 = new AWS.S3(); 
- s3.createBucket({Bucket: 'myBucket'}, function() {
-  var params = {Bucket: 'myBucket', Key: 'myKey', Body: 'Hello!'};
-  s3.putObject(params, function(err, data) {
-      if (err) 
-        console.log(err)     
-      else       
-      	console.log("Successfully uploaded data to myBucket/myKey");   
-   });
+	dynamodb.putItem(params, function(err, data){
+		if (err) console.log(err, err.stack);
+		else console.log("Success");
+	});
+		
 });
-*/ 
 
-// tokens
-router.get('/auth_service/tokens', controllers.tokens.getTokens)
 
-// users
-router.get('/auth_service/users/:id', controllers.users.getUser)
-router.post('/auth_service/users', controllers.users.postUser)
-router.put('/auth_service/users/:id', controllers.users.putUser)
-router.delete('/auth_service/users/:id', controllers.users.deleteUser)
+app.get('/auth_service/users/:id',function(req, res){
+	var params = {
+		TableName: 'stan-users',
+		Key:{
+			'user':{'S': req.params.id}
+		}
+	};
 
-// groups
-router.get('/auth_service/groups/:id', controllers.groups.getGroup)
-router.post('/auth_service/groups', controllers.groups.postGroup)
-router.put('/auth_service/groups/:id', controllers.groups.putGroup)
-router.delete('/auth_service/groups/:id', controllers.groups.deleteGroup)
+	dynamodb.getItem(params, function(err, data){
+		if (err) console.log(err, err.stack);
+		else console.log(data)
+	});
+});
 
-// resources
-router.get('/auth_service/resources/:id', controllers.resources.getResource)
-router.post('/auth_service/resources', controllers.resources.postResource)
-router.put('/auth_service/resources/:id', controllers.resources.putResource)
-router.delete('/auth_service/resources/:id', controllers.resources.deleteResource)
+app.delete('/auth_service/users/:id',function(req,res){
+	var params = {
+		TableName: 'stan-users',
+		Key:{
+			'user':{'S': req.params.id}
+		}
+	};
 
-/*
-Amazon DynamoDB Security Credentials for BRian
-Access Key ID:
-AKIAIA7NTQBR73JI6VHQ
-Secret Access Key:
-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
-/*
+	dynamodb.deleteItem(params, function(err,data){
+		if(err) console.log(err, err.stack);
+		else console.log(data)
+	});
+});
+
+})()
