@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/sam-jay/Stan/issues"
   },
-  "homepage": "https://github.com/sam-jay/Stan"
+  "homepage": "https://github.com/sam-jay/Stan",
+  "dependencies": {
+    "dynamodb-model": "0.0.2"
+  }
 }
