@@ -1,9 +1,9 @@
 var config = require('./config');
-	AWS = require('aws-sdk'); 
-	DynamoDBModel = require('dynamodb-model');
-	users = DyanamoDBModel.Model('User')
-	resources = DyanamoDBModel.Model('Resource')
-	groups = DyanamoDBModel.Model('Group')
+	AWS = require('aws-sdk'),
+	DynamoDBModel = require('dynamodb-model'),
+	Users = DyanamoDBModel.Model('User'),
+	Resources = DyanamoDBModel.Model('Resource'),
+	Groups = DyanamoDBModel.Model('Group');
 
 
 

@@ -1,7 +1,14 @@
-var config = require('./config');
-	express = require('express');
+var config = require('./config'),
+	express = require('express'),
 	AWS = require('aws-sdk'); 
 
+/* Set Up DynamoDB */
+
+AWS.config.update({
+    accessKeyId: 'AKIAIA7NTQBR73JI6VHQ',
+    secretAccessKey: '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',
+    region: 'us-east-1'
+});
 
 var s3 = new AWS.S3(); 
  s3.createBucket({Bucket: 'myBucket'}, function() {
