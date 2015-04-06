@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/sam-jay/Stan",
   "dependencies": {
-    "dynamodb-model": "0.0.2"
+    "aws-sdk": "^2.1.21",
+    "dynamodb-model": "0.0.2",
+    "express": "^4.12.3"
   }
 }
