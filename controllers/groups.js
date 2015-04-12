@@ -12,13 +12,13 @@
       var params = {
         TableName: 'stan-groups',
         Key:{
-          'name':{'S': req.params.id}
+          'group_id':{'S': req.params.id}
         }
       };
      app.dynamodb.getItem(params, function(err, data){
         if (err) {
           //on failure return 404
-          return error.respond(404, res, '/auth_service/groups/' + req.params.id);
+          return error.respond(404, res, '/auth_service/groups/' + req.params.id, err);
         } else {
           //on success return 200 with body
           if (Object.keys(data).length === 0) {
@@ -34,16 +34,16 @@
   };
 
   exports.postGroup = function(req, res) {
-    var name, resources, users;
+    var group_id, resource_list, user_list;
     try {
-      name = req.body.name;
-      resources = req.body.resources.split('[').join('').split(']').join('').split("\"").join('').split("\"").join('').split(',');
-      users = req.body.users.split('[').join('').split(']').join('').split("\"").join('').split("\"").join('').split(',');
+      group_id = req.body.group_id;
+      resource_list = req.body.resource_list.split('[').join('').split(']').join('').split("\"").join('').split("\"").join('').split(',');
+      user_list = req.body.user_list.split('[').join('').split(']').join('').split("\"").join('').split("\"").join('').split(',');
       //convert from string to array of strings
       // groups = req.body.groups.split('[').join('').split(']').join('').split("\"").join('').split("\"").join('').split(',');
-      console.log(group);
-      console.log(email);
-      console.log(groups);
+      console.log(group_id);
+      console.log(resource_list);
+      console.log(user_list);
 
     } catch (err) { 
       console.log('parse error');
@@ -53,9 +53,9 @@
     var params = {
       TableName: 'stan-groups',
       Item:{
-        name: {'S': name},
-        resources: {'SS': resources},
-        users: {'SS': users}
+        group_id: {'S': group_id},
+        resource_list: {'SS': resource_list},
+        user_list: {'SS': user_list}
       }
     };
 
@@ -65,10 +65,10 @@
         return error.respond(400, res, 'Cannot parse input');
       } else {
         res.status(201).json({
-          name: name,
-          resources: resources,
-          users: users,
-          url: '/auth_service/groups/' + name
+          group_id: group_id,
+          resource_list: resource_list,
+          user_list: user_list,
+          url: '/auth_service/groups/' + group_id
         });
       }
     });
@@ -80,23 +80,22 @@
     var expAttributeVals = {};
 
     try {
-      if (req.body.name) {
-        updateExp = updateExp + 'name = :name,';
-        expAttributeVals[':name'] = {
-          'S': req.body.name
+      if (req.body.group_id) {
+        updateExp = updateExp + 'group_id = :group_id,';
+        expAttributeVals[':group_id'] = {
+          'S': req.body.group_id
         };
       } 
-      if (req.body.users) {
-        updateExp = updateExp + 'users = :users,';
-        expAttributeVals[':users'] = {
-          'SS': req.body.users.split('[').join('').split(']').join('').split("\"").join('').split("\"").join('').split(',')
+      if (req.body.user_list) {
+        updateExp = updateExp + 'user_list = :user_list,';
+        expAttributeVals[':user_list'] = {
+          'SS': req.body.user_list.split('[').join('').split(']').join('').split("\"").join('').split("\"").join('').split(',')
         };
       } 
-      if (req.body.groups) {
-        groups = req.body.groups.split('[').join('').split(']').join('').split("\"").join('').split("\"").join('').split(',')
-        updateExp = updateExp + 'groups = :groups';
-        expAttributeVals[':groups'] = {
-          'SS': groups
+      if (req.body.resource_list) {
+        updateExp = updateExp + 'resource_list = :resource_list';
+        expAttributeVals[':resource_list'] = {
+          'SS': req.body.resource_list.split('[').join('').split(']').join('').split("\"").join('').split("\"").join('').split(',')
         };
       } 
       //remove trailing ,
@@ -112,7 +111,7 @@
     var params = {
       TableName: 'stan-groups',
       Key:{
-        'name':{'S': req.params.id}
+        'group_id':{'S': req.params.id}
       },
       UpdateExpression: updateExp,
       ExpressionAttributeValues: expAttributeVals
@@ -121,21 +120,21 @@
     app.dynamodb.updateItem(params, function(err, data){
       if (err) {
         console.log(err);
-        return error.respond(404, res, '/auth_service/groups/' + req.params.id);
+        return error.respond(404, res, '/auth_service/groups/' + req.params.id, err);
       } else {
-        //if name has been changed 
-        if (req.body.name) {
+        //if group_id has been changed 
+        if (req.body.group_id) {
           params = {
             TableName: 'stan-groups',
             Key:{
-              'name':{'S': req.body.name}
+              'group_id':{'S': req.body.group_id}
             }
           };
         } else {
           params = {
             TableName: 'stan-groups',
             Key:{
-              'name':{'S': req.params.id}
+              'group_id':{'S': req.params.id}
             }
           };
         }
@@ -143,10 +142,9 @@
         app.dynamodb.getItem(params, function(err, data){
           if (err) {
             //on failure return 404
-            return error.respond(404, res, '/auth_service/groups/' + req.params.id);
+            return error.respond(404, res, '/auth_service/groups/' + req.params.id, err);
           } else {
             //on success return 200 with body
-
             if (Object.keys(data).length === 0) {
               return error.respond(404, res, '/auth_service/groups/' + req.params.id);
             }
@@ -163,12 +161,12 @@
     var params = {
       TableName: 'stan-groups',
       Key:{
-        'name':{'S': req.params.id}
+        'group_id':{'S': req.params.id}
       }
     };
     app.dynamodb.getItem(params, function(err, data){
       if (err) {
-        return error.respond(404, res, '/auth_service/groups/' + req.params.id);
+        return error.respond(404, res, '/auth_service/groups/' + req.params.id, err);
       } else {
         //on success return 200 with body
         if (Object.keys(data).length === 0) {

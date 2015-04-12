@@ -12,7 +12,7 @@
       var params = {
         TableName: 'stan-users',
         Key:{
-          'user':{'S': req.params.id}
+          'user_id':{'S': req.params.id}
         }
       };
       console.log(params);
@@ -35,16 +35,16 @@
   };
 
   exports.postUser = function(req, res, next) {
-    var user, email, password, groups;
+    var user_id, email, password, group_list;
     try {
-      user = req.body.user;
+      user_id = req.body.user_id;
       email = req.body.email;
       password = req.body.pw;
       //convert from string to array of strings
-      groups = req.body.groups.split('[').join('').split(']').join('').split("\"").join('').split("\"").join('').split(',');
-      console.log(user);
+      group_list = req.body.group_list.split('[').join('').split(']').join('').split("\"").join('').split("\"").join('').split(',');
+      console.log(user_id);
       console.log(email);
-      console.log(groups);
+      console.log(group_list);
 
     } catch (err) { 
       console.log('parse error')
@@ -54,10 +54,10 @@
     var params = {
       TableName: 'stan-users',
       Item:{
-        user: {'S': user},
+        user_id: {'S': user_id},
         email: {'S': email},
         password: {'S': password},
-        groups: {'SS': groups}
+        group_list: {'SS': group_list}
       }
     };
 
@@ -67,25 +67,25 @@
         return error.respond(400, res, 'Cannot parse input');
       } else {
         res.status(201).json({
-          user: user,
+          user_id: user_id,
           email: email,
-          groups: groups,
-          url: '/auth_service/users/' + user
+          group_list: group_list,
+          url: '/auth_service/users/' + user_id
         });
       }
     });
   };
 
   exports.putUser = function(req, res, next) {
-    // var user, email, password, groups;
+    // var user_id, email, password, group_list;
     var updateExp = 'set ';
     var expAttributeVals = {};
 
     try {
-      if (req.body.user) {
-        updateExp = updateExp + 'user = :username,';
+      if (req.body.user_id) {
+        updateExp = updateExp + 'user_id = :username,';
         expAttributeVals[':username'] = {
-          'S': req.body.user
+          'S': req.body.user_id
         };
       } 
       if (req.body.email) {
@@ -100,11 +100,11 @@
           'S': req.body.pw
         };
       } 
-      if (req.body.groups) {
-        groups = req.body.groups.split('[').join('').split(']').join('').split("\"").join('').split("\"").join('').split(',');
-        updateExp = updateExp + 'groups = :groups';
-        expAttributeVals[':groups'] = {
-          'SS': groups
+      if (req.body.group_list) {
+        group_list = req.body.group_list.split('[').join('').split(']').join('').split("\"").join('').split("\"").join('').split(',');
+        updateExp = updateExp + 'group_list = :group_list';
+        expAttributeVals[':group_list'] = {
+          'SS': group_list
         };
       } 
       //remove trailing ,
@@ -120,7 +120,7 @@
     var params = {
       TableName: 'stan-users',
       Key:{
-        'user':{'S': req.params.id}
+        'user_id':{'S': req.params.id}
       },
       UpdateExpression: updateExp,
       ExpressionAttributeValues: expAttributeVals
@@ -135,7 +135,7 @@
         params = {
           TableName: 'stan-users',
           Key:{
-            'user':{'S': req.params.id}
+            'user_id':{'S': req.params.id}
           }
         };
         app.dynamodb.getItem(params, function(err, data){
@@ -161,7 +161,7 @@
     var params = {
       TableName: 'stan-users',
       Key:{
-        'user':{'S': req.params.id}
+        'user_id':{'S': req.params.id}
       }
     };
     app.dynamodb.getItem(params, function(err, data){
