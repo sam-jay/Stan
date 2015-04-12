@@ -39,10 +39,10 @@ app.delete('/auth_service/users/:id', controllers.users.deleteUser);
 
 // groups
 
-// app.get('/auth_service/groups/:id', controllers.groups.getGroup);
-// app.post('/auth_service/groups', controllers.groups.postGroup);
-// app.put('/auth_service/groups/:id', controllers.groups.putGroup);
-// app.delete('/auth_service/groups/:id', controllers.groups.deleteGroup);
+app.get('/auth_service/groups/:id', controllers.groups.getGroup);
+app.post('/auth_service/groups', controllers.groups.postGroup);
+app.put('/auth_service/groups/:id', controllers.groups.putGroup);
+app.delete('/auth_service/groups/:id', controllers.groups.deleteGroup);
 
 // resources
 
