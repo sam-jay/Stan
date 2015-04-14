@@ -19,7 +19,7 @@
           username=parts[0],
           password=parts[1];
     } else {
-      console.log('fucked');
+      return error.respond(401, res, 'Username and password must be specified in base64 encoding in the Authorization header of the request.')
     }
     console.log(username);
     console.log(password);
