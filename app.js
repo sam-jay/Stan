@@ -17,8 +17,8 @@ console.log("Listening on port: " + config.port);
 
 var dynamodb = new AWS.DynamoDB({
   region: 'us-west-2',
-  accessKeyId: '***',
-  secretAccessKey: '***'
+  accessKeyId: 'AKIAJ4HOZGJ5VEJNQXXA',
+  secretAccessKey: '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'
 });
 
 var controllers = {};
@@ -29,7 +29,7 @@ fs.readdirSync('./controllers').forEach(function (file) {
 });
 
 // tokens
-//router.get('/auth_service/tokens', controllers.tokens.getTokens);
+app.get('/auth_service/tokens', controllers.tokens.getTokens);
 
 // users
 app.get('/auth_service/users/:id', controllers.users.getUser);
@@ -46,10 +46,10 @@ app.delete('/auth_service/groups/:id', controllers.groups.deleteGroup);
 
 // resources
 
-// app.get('/auth_service/resources/:id', controllers.resources.getResource);
-// app.post('/auth_service/resources', controllers.resources.postResource);
-// app.put('/auth_service/resources/:id', controllers.resources.putResource);
-// app.delete('/auth_service/resources/:id', controllers.resources.deleteResource);
+app.get('/auth_service/resources/:id', controllers.resources.getResource);
+app.post('/auth_service/resources', controllers.resources.postResource);
+app.put('/auth_service/resources/:id', controllers.resources.putResource);
+app.delete('/auth_service/resources/:id', controllers.resources.deleteResource);
 
 
 exports.dynamodb = dynamodb;

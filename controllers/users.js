@@ -25,7 +25,8 @@
           if (Object.keys(data).length === 0) {
             return error.respond(404, res, '/auth_service/users/' + req.params.id);
           }
-          res.status(200).json(data);
+          return res.status(200).json(data);
+          //return res.json(data);
         }
       });
     } else {
