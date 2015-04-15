@@ -15,7 +15,6 @@
           'user_id':{'S': req.params.id}
         }
       };
-      console.log(params);
       app.dynamodb.getItem(params, function(err, data){
         if (err) {
           //on failure return 404

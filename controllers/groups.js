@@ -7,7 +7,7 @@
   error = require('../error.js');
 
   // assume username is primary key
-  exports.getGroup = function(req, res) {
+  exports.getGroup = function(req, res, callback) {
     if (req.params.id !== undefined) {
       var params = {
         TableName: 'stan-groups',
@@ -25,6 +25,7 @@
             return error.respond(404, res, '/auth_service/groups/' + req.params.id);
           }
           res.status(200).json(data);
+          return callback(data);
         }
       });
     } else {

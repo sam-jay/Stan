@@ -10,7 +10,6 @@
       resources = require('./resources.js');
 
   exports.getTokens = function(req, res) {
-    console.log(req.headers);
     if (req.headers['authorization'] !== undefined) {
       var header=req.headers['authorization']||'',        // get the header
           token=header.split(/\s+/).pop()||'',            // and the encoded auth token
@@ -21,13 +20,22 @@
     } else {
       return error.respond(401, res, 'Username and password must be specified in base64 encoding in the Authorization header of the request.')
     }
-    console.log(username);
-    console.log(password);
     req = {};
     req['params'] = {'id': username};
+    var userInfo, userPW;
     users.getUser(req, res, function(data) {
-      console.log(data);
+      userInfo = data;
+      userPW = userInfo['Item']['password']['S'];
+      if (userPW !== password) {
+        return res.status(401).json({
+        code: 'AuthenticationFailure',
+        message: 'Invalid username / password combination'
+        });
+      } else {
+        console.log(userPW);
+      }
     });
+
   };
 
 

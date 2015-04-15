@@ -17,7 +17,8 @@ console.log("Listening on port: " + config.port);
 
 var dynamodb = new AWS.DynamoDB({
   region: 'us-west-2',
-  
+  accessKeyId: 'AKIAJODMW7XXDSKFXSOA',
+  secretAccessKey: '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'
 });
 
 var controllers = {};
