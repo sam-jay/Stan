@@ -25,9 +25,9 @@
     console.log(password);
     req = {};
     req['params'] = {'id': username};
-    var results;
-    users.getUser(req, res);
-    console.log(results);
+    users.getUser(req, res, function(data) {
+      console.log(data);
+    });
   };
 
 
