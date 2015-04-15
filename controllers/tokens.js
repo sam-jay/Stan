@@ -22,17 +22,34 @@
     }
     req = {};
     req['params'] = {'id': username};
-    var userInfo, userPW;
+    var userInfo, userPW, userGroups;
     users.getUser(req, res, function(data) {
       userInfo = data;
       userPW = userInfo['Item']['password']['S'];
+      userGroups = userInfo['Item']['group_list']['SS'];
+      // invalid username / pw combo
       if (userPW !== password) {
-        return res.status(401).json({
-        code: 'AuthenticationFailure',
-        message: 'Invalid username / password combination'
-        });
-      } else {
-        console.log(userPW);
+        return error.respond(401, res, 'Invalid Password');
+      } 
+      // valid username/pw combo
+      else {
+        // to hold all resources
+        var resources = [];
+        // cycle through groups
+        for (var i = 0; i < userGroups.length; i++) {
+          console.log(userGroups[i]);
+          req = {}
+          req['params'] = {'id': userGroups[i]};
+          // get corresponding resources
+          groups.getGroup(req, res, function(data) {
+            groupInfo = data;
+            groupResources = groupInfo['Item']['resource_list']['SS'];
+            // add all resources to list
+            for (var j = 0; j < groupResources.length; j++) {
+              resources.push(groupResources[j]);
+            }
+          });
+        }
       }
     });
 

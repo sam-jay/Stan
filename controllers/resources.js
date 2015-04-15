@@ -7,7 +7,7 @@
       error = require('../error.js');
 
   // assume username is primary key
-  exports.getResource = function(req, res) {
+  exports.getResource = function(req, res, callback) {
     if (req.params.id !== undefined) {
       var params = {
         TableName: 'stan-resources',
@@ -25,6 +25,7 @@
             return error.respond(404, res, '/auth_service/resources/' + req.params.id);
           }
           res.status(200).json(data);
+          return callback(data);
         }
       });
     } else {
