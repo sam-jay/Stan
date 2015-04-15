@@ -7,7 +7,7 @@
   error = require('../error.js');
 
   // assume username is primary key
-  exports.getUser = function(req, res) {
+  exports.getUser = function(req, res, callback) {
     if (req.params.id !== undefined) {
       var params = {
         TableName: 'stan-users',
@@ -25,7 +25,8 @@
           if (Object.keys(data).length === 0) {
             return error.respond(404, res, '/auth_service/users/' + req.params.id);
           }
-          return res.status(200).json(data);
+          res.status(200).json(data);
+          return callback(data);
           //return res.json(data);
         }
       });
