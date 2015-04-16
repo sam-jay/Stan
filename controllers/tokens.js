@@ -90,9 +90,14 @@
 
   exports.getTokens = function(req, res) {
     if (req.headers['authorization'] !== undefined) {
+      console.log(req.headers);
       var header=req.headers['authorization']||'',        // get the header
           token=header.split(/\s+/).pop()||'',            // and the encoded auth token
-          auth=new Buffer(token, 'base64').toString(),    // convert from base64
+          type = header.split(/\s+/)[0];
+          if (type.toLowerCase() !== 'basic') {
+              return error.respond(401, res, 'Invalid Authorization - Require Basic Auth');
+          }
+          var auth=new Buffer(token, 'base64').toString(),    // convert from base64
           parts=auth.split(/:/),                          // split on colon
           username=parts[0],
           password=parts[1];
