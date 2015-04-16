@@ -24,7 +24,7 @@
           if (Object.keys(data).length === 0) {
             return error.respond(404, res, '/auth_service/groups/' + req.params.id);
           }
-          res.status(200).json(data);
+          res.json(200, data);
           return callback(data);
         }
       });
