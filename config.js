@@ -9,5 +9,11 @@
   //     app.use(bodyParser.urlencoded({ extended: false }));
   //     app.use(bodyParser.json());
   //   }
+    //add hostname
+    //
+    rosie: {
+      hostname: 'localhost',
+      port: 3000
+    }
   }
 })();

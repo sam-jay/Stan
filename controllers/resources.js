@@ -4,10 +4,54 @@
   /* Dependencies */
   var AWS = require('aws-sdk'),
       app = require('../app.js'),
-      error = require('../error.js');
+      error = require('../error.js'),
+      http = require('http'),
+      config = require('../config.js');
+
+  var updateRosie = function() {
+    //on every put post delete 
+    
+    var params = {
+      TableName:'stan-resources'
+    };
+    app.dynamodb.scan(params, function(err, data){
+      if (err)
+        return console.log(err);
+      
+      var resources = [];
+      //process resources in the format:
+      // { resource_id: { S: 'f' },
+         // resource_token: { S: 'coolestpassword11' } },
+      data['Items'].forEach(function(element, index, array) {
+        resources.push({
+          'resource_id': element['resource_id']['S'],
+          'resource_token': element['resource_token']['S']
+        });
+      });
+      console.log(resources);
+      var options = {
+        hostname: config.rosie.hostname,
+        port: config.rosie.port,
+        path: '/api_manager/updateResourceTokens',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+      var resStr = JSON.stringify(resources);
+      console.log(resStr);
+      var req = http.request(options, function (res) {
+      });
+      req.write(resStr);
+      req.end();
+    });
+  };
+
+
 
   // assume username is primary key
   exports.getResource = function(req, res, callback) {
+    console.log('hi');
     if (req.params.id !== undefined) {
       var params = {
         TableName: 'stan-resources',
@@ -59,6 +103,8 @@
         console.log(err);
         return error.respond(400, res, 'Cannot parse input');
       } else {
+        //update tokens and resource mapping
+        updateRosie();
         res.status(201).json({
           resource_id: resource_id,
           resource_token: resource_token,
@@ -71,7 +117,8 @@
   exports.putResource = function(req, res, next) {
     var updateExp = 'set ';
     var expAttributeVals = {};
-
+    if (req.params.id === undefined)
+      return error.respond(405, res, 'Parameter resource_id has not been specified in URL.');
     try {
       if (req.body.resource_id) {
         updateExp = updateExp + 'resource_id = :resource_id,';
@@ -132,6 +179,8 @@
             //on failure return 404
             return error.respond(404, res, '/auth_service/resources/' + req.params.id, err);
           } else {
+            //update tokens and resource mapping
+            updateRosie();
             //on success return 200 with body
             if (Object.keys(data).length === 0) {
               return error.respond(404, res, '/auth_service/resources/' + req.params.id);
@@ -161,6 +210,8 @@
           return error.respond(404, res, '/auth_service/resources/' + req.params.id);
         } else {
           app.dynamodb.deleteItem(params, function(response, result){
+            //update tokens and resource mapping
+            updateRosie();
             res.status(204).send();
           });
         }
