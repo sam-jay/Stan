@@ -8,7 +8,7 @@
       http = require('http'),
       config = require('../config.js');
 
-  var updateRosie = function() {
+  exports.updateRosie = function() {
     //on every put post delete 
     
     var params = {
