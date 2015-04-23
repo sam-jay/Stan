@@ -5,7 +5,8 @@ var config = require('./config'),
   AWS = require('aws-sdk'),
   error = require('./error.js'),
   fs = require('fs'),
-  parser = require('body-parser');
+  parser = require('body-parser'),
+  resources = require('resources');
 
 var app = express();
 app.use(parser.urlencoded({ extended: false }));
@@ -53,5 +54,5 @@ app.delete('/auth_service/resources/:id', controllers.resources.deleteResource);
 
 
 exports.dynamodb = dynamodb;
-
+resources.updateRosie();
 })();
