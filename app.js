@@ -6,7 +6,7 @@ var config = require('./config'),
   error = require('./error.js'),
   fs = require('fs'),
   parser = require('body-parser'),
-  resources = require('resources');
+  resources = require('./controllers/resources');
 
 var app = express();
 app.use(parser.urlencoded({ extended: false }));
