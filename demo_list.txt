@@ -1,0 +1,11 @@
+demo list:
+**make sure to update nonce
+Start with Auth
+	- send GET request with no auth header 
+	- send GET request with invalid basic auth header
+	- send GET request with bad auth header (no basic or bearer)
+	- send GET request with valid basic auth header (kristie:password encoded into base64 = 'a3Jpc3RpZTpwYXNzd29yZA==')
+	- send GET request with valid bearer auth header (cool)
+
+
+
