@@ -4,7 +4,7 @@
   var bodyParser = require('body-parser');
 
   module.exports = {
-    port: 3001,
+    port: 4000,
   //   express: function(app) {
   //     app.use(bodyParser.urlencoded({ extended: false }));
   //     app.use(bodyParser.json());
@@ -13,7 +13,7 @@
     //
     rosie: {
       hostname: 'localhost',
-      port: 3000
+      port: 3001
     }
   }
 })();
