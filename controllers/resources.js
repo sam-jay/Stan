@@ -35,7 +35,8 @@
         path: '/api_manager/updateResourceTokens',
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'nonce': String(Math.random() * 10000000)
         }
       };
       var resStr = JSON.stringify(resources);
