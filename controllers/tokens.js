@@ -143,7 +143,10 @@
                     } 
                     console.log(group_counter);
                     if (counter === arr.length && group_counter === groupArray.length) {
+                      console.log('inside');
                       res.status(200).json({"tokens": tokens});
+                    } else {
+                      console.log('else');
                     }
                   });
                 });
