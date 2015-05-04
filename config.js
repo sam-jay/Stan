@@ -5,12 +5,11 @@
 
   module.exports = {
     port: 4000,
-  //   express: function(app) {
-  //     app.use(bodyParser.urlencoded({ extended: false }));
-  //     app.use(bodyParser.json());
-  //   }
-    //add hostname
-    //
+    var dynamodb = new AWS.DynamoDB({
+      region: 'us-west-2',
+      accessKeyId: '***',
+      secretAccessKey: '***'
+    });
     rosie: {
       hostname: 'localhost',
       port: 3001
